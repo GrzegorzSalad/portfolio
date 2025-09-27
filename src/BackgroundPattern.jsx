@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
+import "./Background.css";
 
-function CalculateWordAmount(word, screenWidth) {
+function HorizontalWordAmount(word, screenWidth) {
     let letters = word.length;
     return Math.ceil(screenWidth / 20 / letters);
 }
 
+function VerticalWordAmount(word, screenHeight) {
+    return Math.ceil(screenHeight / 25)
+}
 
 const BackgroundPattern = ({word}) => {
     const [width, setWidth] = useState(document.documentElement.clientWidth);
@@ -23,21 +27,25 @@ const BackgroundPattern = ({word}) => {
         return () => {document.removeEventListener("resize", handleResize)}
     }, [])
 
-    const lettersPerWidth = CalculateWordAmount(word, width, height);
-
+    const lettersPerWidth = HorizontalWordAmount(word, width);
+    const lettersPerHeight = VerticalWordAmount(word, height);
     return (
         <div>
-            <div>
-                {Array.from({ length: lettersPerWidth }).map((_, i) => (
-                    <span key={i} className="hover:text-purple-800 font-bytesized text-[50px] leading-[25px] tracking-[-5px]">{ word }</span>
-
+            <div className="overflow-hidden h-[100vh] w-[100vw]">
+                {Array.from({ length: lettersPerHeight }).map((_, i) => (
+                    <div key={i} className="flex">
+                    {Array.from({ length: lettersPerWidth }).map((_, i) => (
+                            <div key={i} className="hover:text-white font-bytesized text-[50px] leading-[25px] tracking-[-5px]">{ word }</div>
+                        ))}
+                    </div>
                 ))}
+
             </div>
-            <div>
-                width: { width }
-                height: { height }
-                lettersPerWidth: { lettersPerWidth }
-            </div>
+            {/*<div>*/}
+            {/*    lettersPerWidth: { lettersPerWidth }*/}
+            {/*    <br/>*/}
+            {/*    lettersPerHeight: { lettersPerHeight }*/}
+            {/*</div>*/}
         </div>
     )
 }
