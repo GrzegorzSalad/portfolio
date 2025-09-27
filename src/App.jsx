@@ -5,7 +5,7 @@ import "./App.css"
 const App = () => {
     return (
         <div>
-            <BackgroundPattern word={"stuff"}/>
+            <BackgroundPattern word={"h"}/>
         </div>
     )
 }
