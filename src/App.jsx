@@ -1,11 +1,19 @@
 import React from 'react';
 import BackgroundPattern from "./BackgroundPattern.jsx";
+import Header from "./Header.jsx";
+import Terminal from "./Terminal.jsx";
+import MousePosition from "./MousePosition.jsx";
 import "./App.css"
 
 const App = () => {
     return (
         <div>
-            <BackgroundPattern word={"h"}/>
+            <Header/>
+
+            <MousePosition/>
+            <Terminal/>
+
+            <BackgroundPattern/>
         </div>
     )
 }

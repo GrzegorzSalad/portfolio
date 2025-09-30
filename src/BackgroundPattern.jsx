@@ -1,113 +1,55 @@
-import {useState, useEffect} from "react";
-import "./Background.css";
+import React, {useEffect, useState} from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-function HorizontalWordAmount(word, screenWidth) {
-    let letters = word.length;
-    return Math.ceil(screenWidth / 20 / letters);
-}
+gsap.registerPlugin(ScrollTrigger);
 
-function VerticalWordAmount(word, screenHeight) {
-    return Math.ceil(screenHeight / 25)
-}
+export default function BackgroundPattern() {
+    const [cloudFrame, setCloudFrame] = useState(0);
+    const [skullFrame, setSkullFrame] = useState(0);
+    const cloudImage = (index) => `./src/assets/frames/background_clouds/90sclouds-${index}.png`;
+    const skullImage = (index) => `./src/assets/frames/spinning_skull/frame_${index}_delay-0.1s.png`;
 
-function RandomWordGenerator() {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    return chars[Math.floor(Math.random() * chars.length)];
-
-}
-
-function RandomColor(row, col, allRows, allCols) {
-    const r = Math.floor((row / (allRows - 1)) * 255); // row goes from 0 → 255
-    const g = Math.floor((col / (allCols - 1)) * 255);
-    return 'rgb(' + r + ', ' + g + ', ' + r + ')';
-}
-
-const BackgroundPattern = ({word}) => {
-    const [width, setWidth] = useState(document.documentElement.clientWidth);
-    const [height, setHeight] = useState(document.documentElement.clientHeight);
-    const [pos, setPos] = useState({x: 0, y: 0});
 
     useEffect(() => {
-        const handlePos = (e) => {
-            setPos({x: e.clientX, y: e.clientY});
-        }
-        window.addEventListener("mousemove", handlePos);
-
-        return () => {
-            window.removeEventListener("mousemove", handlePos)
-        }
-    }, []);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWidth(document.documentElement.clientWidth)
-            setHeight(document.documentElement.clientHeight);
-        };
-        window.addEventListener("resize", () => {
-            handleResize();
+        let ctx = gsap.context(() => {
+            ScrollTrigger.create({
+                trigger: '#scroll-area',
+                start: "top top",
+                end: "bottom bottom",
+                scrub: true,
+                onUpdate: (self) => {
+                    const skullsCurframe = Math.round(self.progress * 17);
+                    setSkullFrame(skullsCurframe);
+                },
+            })
         })
-        return () => {
-            document.removeEventListener("resize", handleResize)
-        }
+
+        return () => ctx.revert();
     }, [])
 
-    const lettersPerWidth = HorizontalWordAmount(word, width);
-    const lettersPerHeight = VerticalWordAmount(word, height);
+    useEffect(() => {
+        let ctx = gsap.context(() => {
+            ScrollTrigger.create({
+                trigger: "#scroll-area",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: true,
+                onUpdate: (self) => {
+                    const cloudsCurFrame = Math.round(self.progress * 29);
+                    setCloudFrame(cloudsCurFrame);
+                    console.log(cloudsCurFrame);
+                },
+            });
+        });
+
+        return () => ctx.revert();
+    }, []);
+
     return (
-        <div>
-            <div className="overflow-hidden h-[100vh] w-[100vw] z-[-1] absolute">
-                {Array.from({length: lettersPerHeight}).map((_, row) => (
-                    <div key={row} className="flex">
-                        {Array.from({length: lettersPerWidth}).map((_, col) => {
-                                const cellWidth = width / lettersPerWidth;
-                                const cellHeight = height / lettersPerHeight;
-                                const centerX = col * cellWidth + cellWidth / 2;
-                                const centerY = row * cellHeight + cellHeight / 2;
-                                const dx = pos.x - centerX;
-                                const dy = pos.y - centerY;
-                                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                                let content = "";
-
-                                //let distances = [100, 200, 300, 400, 500, 600, 700, 800, 900];
-
-
-
-                                if (distance < 100) {
-                                    content = word;
-                                } else if (distance < 200) {
-                                    content = "a";
-                                } else {
-                                    content = RandomWordGenerator();
-                                }
-
-
-                                return (
-                                    <div key={col}
-                                         className="font-bytesized text-[50px] leading-[25px] tracking-[-5px] decoration-amber-200s"
-                                         style={{
-                                             color: RandomColor(col, row, lettersPerWidth, lettersPerHeight),
-
-                                         }}
-                                    >
-                                        {content}
-                                    </div>
-                                )
-                            }
-                        )
-                        }
-                    </div>
-                ))}
-
-            </div>
-            {/*<div className="bg-white" ref={ref}>*/}
-            {/*    x: {pos.x}*/}
-            {/*    <br/>*/}
-            {/*    y: {pos.y}*/}
-            {/*    <br/>*/}
-            {/*</div>*/}
+        <div id="scroll-area" style={{ height: "200vh" }}>
+            <img alt={"clouds"} src={cloudImage(cloudFrame)} className={"saturate-200 fixed top-0 left-0 w-full h-full pointer-events-none select-none z-[-1]"}/>
+            <img alt={"skulls"} src={skullImage(skullFrame)} className="brightness-200 saturate-150 fixed top-1/2 left-1/2 pointer-events-none select-none z-10 w-[300px] h-[200px] -translate-x-1/2 -translate-y-1/2"/>
         </div>
-    )
+    );
 }
-
-export default BackgroundPattern;
