@@ -7,8 +7,8 @@ gsap.registerPlugin(ScrollTrigger);
 export default function BackgroundPattern() {
     const [cloudFrame, setCloudFrame] = useState(0);
     const [skullFrame, setSkullFrame] = useState(0);
-    const cloudImage = (index) => `portfolio/frames/background_clouds/90sclouds-${index}.png`;
-    const skullImage = (index) => `portfolio/frames/spinning_skull/frame_${index}_delay-0.1s.png`;
+    const cloudImage = (index) => `portfolio/public/frames/background_clouds/90sclouds-${index}.png`;
+    const skullImage = (index) => `portfolio/public/frames/spinning_skull/frame_${index}_delay-0.1s.png`;
 
     useEffect(() => {
         let ctx = gsap.context(() => {
