@@ -10,9 +10,6 @@ export default function BackgroundPattern() {
     const cloudImage = (index) => `portfolio/frames/background_clouds/90sclouds-${index}.png`;
     const skullImage = (index) => `portfolio/frames/spinning_skull/frame_${index}_delay-0.1s.png`;
 
-
-
-
     useEffect(() => {
         let ctx = gsap.context(() => {
             ScrollTrigger.create({

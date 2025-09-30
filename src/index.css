@@ -2,14 +2,14 @@
 
 @font-face {
     font-family: 'F25BankPrinterBold';
-    src: url('src/assets/fonts/F25_Bank_Printer_Bold.ttf') format('truetype');
+    src: url('../public/fonts/F25_Bank_Printer_Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Terminal';
-    src: url('src/assets/fonts/Terminal F4.ttf') format('truetype');
+    src: url('../public/fonts/Terminal F4.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
