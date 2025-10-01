@@ -4,12 +4,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+
+
 export default function BackgroundPattern() {
+    const BASE_URL = import.meta.env.BASE_URL;
     const [cloudFrame, setCloudFrame] = useState(0);
     const [skullFrame, setSkullFrame] = useState(0);
-    const cloudImage = (index) => `portfolio/public/frames/background_clouds/90sclouds-${index}.png`;
-    const skullImage = (index) => `portfolio/public/frames/spinning_skull/frame_${index}_delay-0.1s.png`;
-
+    const cloudImage = (index) => `${BASE_URL}Images/background_clouds/90sclouds-${index}.png`;
+    const skullImage = (index) => `${BASE_URL}Images/spinning_skull/frame_${index}_delay-0.1s.png`;
+    
     useEffect(() => {
         let ctx = gsap.context(() => {
             ScrollTrigger.create({
@@ -18,7 +21,7 @@ export default function BackgroundPattern() {
                 end: "bottom bottom",
                 scrub: true,
                 onUpdate: (self) => {
-                    const skullsCurframe = Math.round(self.progress * 17);
+                    const skullsCurframe = Math.round(self.progress * 18);
                     setSkullFrame(skullsCurframe);
                 },
             })
@@ -37,7 +40,6 @@ export default function BackgroundPattern() {
                 onUpdate: (self) => {
                     const cloudsCurFrame = Math.round(self.progress * 29);
                     setCloudFrame(cloudsCurFrame);
-                    console.log(cloudsCurFrame);
                 },
             });
         });
